@@ -1,3 +1,5 @@
+#!/usr/bin/env python
+# -*- coding: utf-8 -*-
 """The OLS class is built on top of the MLClass abstract class"""
 from __future__ import division
 import numpy as np
