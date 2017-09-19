@@ -41,11 +41,11 @@ the mean squared error."""
                 self._coef = w_hat
                 self._mse = mse
             else:
-                X_cons = np.insert(X, X.shape[1], values=1, axis=1)
+                X_cons = np.insert(X, 0, values=1, axis=1)
                 w_hat = np.linalg.inv(X_cons.transpose().dot(X_cons)).dot(X_cons.transpose().dot(y))
                 self._coef = w_hat
                 self._mse = np.sum((X_cons.dot(w_hat) - y) ** 2) / len(y)
-                self._intercept = w_hat[-1]
+                self._intercept = w_hat[0]
 
             print 'Model trained.'
             print 'The coeficients are {}'.format(self.coef)
@@ -66,5 +66,5 @@ the mean squared error."""
             if not self._with_intercept:
                 return X.dot(self._coef)
             else:
-                X_cons = np.insert(X, X.shape[1], values=1, axis=1)
+                X_cons = np.insert(X, 0, values=1, axis=1)
                 return X_cons.dot(self.coef)
