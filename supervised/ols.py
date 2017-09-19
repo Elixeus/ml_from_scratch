@@ -3,7 +3,7 @@
 """The OLS class is built on top of the MLClass abstract class"""
 from __future__ import division
 import numpy as np
-from utils.utils import MLClass
+from ml_from_scratch.utils.utils import MLClass
 
 
 class OLS(MLClass):
