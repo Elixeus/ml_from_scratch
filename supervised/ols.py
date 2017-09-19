@@ -3,7 +3,7 @@
 """The OLS class is built on top of the MLClass abstract class"""
 from __future__ import division
 import numpy as np
-from ml_from_scratch.utils.utils import MLClass
+from utils.utils import MLClass
 
 
 class OLS(MLClass):
@@ -46,7 +46,7 @@ the mean squared error."""
                 self._coef = w_hat
                 self._mse = np.sum((X_cons.dot(w_hat) - y) ** 2) / len(y)
                 self._intercept = w_hat[-1]
-                
+
             print 'Model trained.'
             print 'The coeficients are {}'.format(self.coef)
             print 'The mean squared error is {}'.format(self.mse)
