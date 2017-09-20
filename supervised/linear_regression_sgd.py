@@ -59,3 +59,9 @@ class LinearRegressionSGD(MLClass):
 
     def predict(self, X):
         return X.dot(self._coef)
+
+    """
+    TODO:
+    1. Create gradient descent as a function in the utility and update the fit function
+    2. Create a linear regression class that includes _coef and _mse as private variables; also create getter/@property for these variables
+    """ 
