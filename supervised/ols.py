@@ -3,34 +3,34 @@
 """The OLS class is built on top of the MLClass abstract class"""
 from __future__ import division
 import numpy as np
-from utils.utils import MLClass
+from utils.metaclass.linear_regression_super import LinearRegressionSuper
 
 
-class OLS(MLClass):
+class OLS(LinearRegressionSGD):
     """The Ordinary Least Squared (OLS) class can fit the data and make
 a prediction based on the training result"""
-    def __init__(self, with_intercept=False):
-        """This is the ordinary least squared (OLS) class. It has 2
-variables: _coef and _mse. _coef stores the coeficients and _mse stores
-the mean squared error."""
-        self._coef = None
-        self._mse = None
-        self._intercept = None
-        self._with_intercept = with_intercept
-
-    @property
-    def coef(self):
-        """getter for the _coef variable"""
-        return self._coef
-
-    @property
-    def mse(self):
-        """getter for the _mse variable"""
-        return self._mse
-    @property
-    def intercept(self):
-        """getter for the _intercept variable"""
-        return self._intercept
+#     def __init__(self, with_intercept=False):
+#         """This is the ordinary least squared (OLS) class. It has 2
+# variables: _coef and _mse. _coef stores the coeficients and _mse stores
+# the mean squared error."""
+#         self._coef = None
+#         self._mse = None
+#         self._intercept = None
+#         self._with_intercept = with_intercept
+# 
+#     @property
+#     def coef(self):
+#         """getter for the _coef variable"""
+#         return self._coef
+# 
+#     @property
+#     def mse(self):
+#         """getter for the _mse variable"""
+#         return self._mse
+#     @property
+#     def intercept(self):
+#         """getter for the _intercept variable"""
+#         return self._intercept
 
     def fit(self, X, y):
         """train the model"""

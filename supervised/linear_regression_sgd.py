@@ -1,8 +1,9 @@
 """Linear Regression with Stochastic Gradient Descent"""
 import numpy as np
+from utils.metaclass.linear_regression_super import LinearRegressionSuper
 
 
-class LinearRegressionSGD(MLClass):
+class LinearRegressionSGD(LinearRegressionSuper):
     """The LinearRegressionSGD class for doing linear regression using the Stochastic Gradient Descent approach."""
     def __init__(self, with_intercept=False, alpha=0.00001, tolerance=1e-10, n_epoch=1000):
         """The initialization requires severy parameters.
@@ -24,16 +25,18 @@ class LinearRegressionSGD(MLClass):
         n_epoch:
         type int
         the number of iterations."""
-        self._coef = None
-        self._mse = None
-        self._intercept = None
-        self._with_intercept = with_intercept
+        super(LinearRegressionSGD, self).__init__(with_intercept)
+#         self._coef = None
+#         self._mse = None
+#         self._intercept = None
+#         self._with_intercept = with_intercept
         self._alpha = alpha
         self._tolerance = tolerance
         self._n_epoch = n_epoch
 
-    def fit(self, X, y):
+    def fit(self, X, y, seed=100):
         """train the data using the gradient descent approach"""
+        np.random.seed(seed)
         coef = np.random.randn(X.shape[1])
         iterations = 0
         mse = np.sum(np.power(X.dot(coef) - y, 2)) / X.shape[1]
@@ -41,21 +44,18 @@ class LinearRegressionSGD(MLClass):
             coef_new = coef - (self._alpha * (2 * X.transpose().dot(X.dot(coef) - y))/ X.shape[1])
             mse_new = np.sum((X.dot(coef_new) - y) ** 2) / X.shape[1]
             if abs(mse_new - mse) < self._tolerance:
-#                 self._coef = coef
-#                 self._mse = mse
                 print 'Converged'
                 break
 
-            else:
-                if iterations % 100 == 0:
-                    print "Iteration: %d - MSE: %.4f" %(iterations, mse_new)
+            if iterations % 100 == 0:
+                print "Iteration: %d - MSE: %.4f" %(iterations, mse_new)
 
-                coef = coef_new
-                mse = mse_new
-                iterations += 1
+            coef = coef_new
+            mse = mse_new
+            iterations += 1
+
         self._coef = coef
         self._mse = mse
-        print 'iteration exhausted'
 
     def predict(self, X):
         return X.dot(self._coef)
