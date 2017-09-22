@@ -5,7 +5,10 @@ from utils.metaclass.linear_regression_super import LinearRegressionSuper
 
 class LinearRegressionSGD(LinearRegressionSuper):
     """The LinearRegressionSGD class for doing linear regression using the Stochastic Gradient Descent approach."""
-    def __init__(self, with_intercept=False, alpha=0.00001, tolerance=1e-10, n_epoch=1000):
+    def __str__(self):
+        return 'Gradient Descent Linear Regression'
+
+    def __init__(self, with_intercept=False, alpha=0.00001, tolerance=1e-10, n_epoch=1000, seed=20):
         """The initialization requires severy parameters.
         -----------------------
         parameters:
@@ -24,41 +27,50 @@ class LinearRegressionSGD(LinearRegressionSuper):
     
         n_epoch:
         type int
-        the number of iterations."""
+        the number of epoch."""
         super(LinearRegressionSGD, self).__init__(with_intercept)
-#         self._coef = None
-#         self._mse = None
-#         self._intercept = None
-#         self._with_intercept = with_intercept
         self._alpha = alpha
         self._tolerance = tolerance
         self._n_epoch = n_epoch
+        self._seed = seed
 
-    def fit(self, X, y, seed=100):
+    def fit(self, X, y):
         """train the data using the gradient descent approach"""
-        np.random.seed(seed)
+        # TODO: check dimensions of X and y
+        np.random.seed(self._seed)
+        # deal with intercepts
+        if not self._with_intercept:
+            X_cons = X
+        else:
+            X_cons = np.insert(X, 0, values=1, axis=1)
+        
         coef = np.random.randn(X.shape[1])
-        iterations = 0
+        epoch = 0
         mse = np.sum(np.power(X.dot(coef) - y, 2)) / X.shape[1]
-        while iterations < self._n_epoch:
+        while epoch < self._n_epoch:
             coef_new = coef - (self._alpha * (2 * X.transpose().dot(X.dot(coef) - y))/ X.shape[1])
             mse_new = np.sum((X.dot(coef_new) - y) ** 2) / X.shape[1]
-            if abs(mse_new - mse) < self._tolerance:
+            # deal with learning rate of too large values
+            if (mse_new > mse) & ((mse_new/mse) > 1.05):
+                raise ValueError('The mse is increasing instead. Please check the learning rate.')
+            # exhausted all the iterations
+            if epoch == self._n_epoch - 1:
+                print 'Iteration exhausted'
+                break
+            # converged
+            if np.abs(mse_new - mse) < self._tolerance:
                 print 'Converged'
                 break
-
-            if iterations % 100 == 0:
-                print "Iteration: %d - MSE: %.4f" %(iterations, mse_new)
+            # print every 1000 iterations
+            if epoch % 1000 == 0:
+                print "Iteration: {0} - MSE: {1:.4f}".format(epoch, mse_new)
 
             coef = coef_new
             mse = mse_new
-            iterations += 1
+            epoch += 1
 
         self._coef = coef
         self._mse = mse
-
-    def predict(self, X):
-        return X.dot(self._coef)
 
     """
     TODO:

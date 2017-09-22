@@ -9,31 +9,11 @@ from utils.metaclass.linear_regression_super import LinearRegressionSuper
 class OLS(LinearRegressionSGD):
     """The Ordinary Least Squared (OLS) class can fit the data and make
 a prediction based on the training result"""
-#     def __init__(self, with_intercept=False):
-#         """This is the ordinary least squared (OLS) class. It has 2
-# variables: _coef and _mse. _coef stores the coeficients and _mse stores
-# the mean squared error."""
-#         self._coef = None
-#         self._mse = None
-#         self._intercept = None
-#         self._with_intercept = with_intercept
-# 
-#     @property
-#     def coef(self):
-#         """getter for the _coef variable"""
-#         return self._coef
-# 
-#     @property
-#     def mse(self):
-#         """getter for the _mse variable"""
-#         return self._mse
-#     @property
-#     def intercept(self):
-#         """getter for the _intercept variable"""
-#         return self._intercept
-
+    def __str__(self):
+        return 'Ordinary Least Squared'
     def fit(self, X, y):
         """train the model"""
+        # TODO: check dimension of y
         if len(y) == X.shape[0]:
             if not self._with_intercept:
                 w_hat = np.linalg.inv(X.transpose().dot(X)).dot(X.transpose().dot(y))
@@ -52,19 +32,7 @@ a prediction based on the training result"""
             print 'The mean squared error is {}'.format(self.mse)
 
         else:
-            self._coef = None
-            self._mse = None
+            self.reset_params()
             print 'The number of rows {mat} in in the matrix'\
                   'does not match the size of the'\
                   'vector {vec}'.format(mat=X.shape[0], vec=len(y))
-
-    def predict(self, X):
-        """use the weights to predict new values"""
-        if self._coef is None:
-            raise ValueError('ols coeficients are not properly initialized')
-        else:
-            if not self._with_intercept:
-                return X.dot(self._coef)
-            else:
-                X_cons = np.insert(X, 0, values=1, axis=1)
-                return X_cons.dot(self.coef)
