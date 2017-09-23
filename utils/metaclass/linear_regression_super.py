@@ -9,6 +9,8 @@ class LinearRegressionSuper(MLClass):
         self._mse = None
         self._intercept = None
         self._with_intercept = with_intercept
+        self._r_squared = None
+        self._residual = None
     
     @property
     def coef(self):
@@ -19,11 +21,18 @@ class LinearRegressionSuper(MLClass):
     @property
     def intercept(self):
         return self._intercept
+    @property
+    def r_squared(self):
+        return self._r_squared
+    @property
+    def residual(self):
+        return self._residual
         
     def reset_params(self):
         self._coef = None
         self._mse = None
         self._intercept = False
+        self._r_squared = None
     
     def predict(self, X):
         """use the weights to predict new values"""

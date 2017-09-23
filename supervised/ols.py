@@ -4,6 +4,7 @@
 from __future__ import division
 import numpy as np
 from utils.metaclass.linear_regression_super import LinearRegressionSuper
+from utils.utils import r_squared
 
 
 class OLS(LinearRegressionSGD):
@@ -16,17 +17,14 @@ a prediction based on the training result"""
         # TODO: check dimension of y
         if len(y) == X.shape[0]:
             if not self._with_intercept:
-                w_hat = np.linalg.inv(X.transpose().dot(X)).dot(X.transpose().dot(y))
-                mse = np.sum((X.dot(w_hat) - y) ** 2) / len(y)
-                self._coef = w_hat
-                self._mse = mse
+                X_cons = X
             else:
                 X_cons = np.insert(X, 0, values=1, axis=1)
-                w_hat = np.linalg.inv(X_cons.transpose().dot(X_cons)).dot(X_cons.transpose().dot(y))
-                self._coef = w_hat
-                self._mse = np.sum((X_cons.dot(w_hat) - y) ** 2) / len(y)
-                self._intercept = w_hat[0]
-
+            w_hat = np.linalg.inv(X_cons.transpose().dot(X_cons)).dot(X_cons.transpose().dot(y))
+            self._mse = np.sum((X_cons.dot(w_hat) - y) ** 2) / len(y)
+            self._intercept = w_hat[0]
+            self._coef = w_hat
+            self._r_squared = r_squared(y, self.mse)
             print 'Model trained.'
             print 'The coeficients are {}'.format(self.coef)
             print 'The mean squared error is {}'.format(self.mse)

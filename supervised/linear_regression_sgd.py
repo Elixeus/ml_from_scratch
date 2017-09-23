@@ -1,6 +1,8 @@
 """Linear Regression with Stochastic Gradient Descent"""
+from __future__ import division
 import numpy as np
 from utils.metaclass.linear_regression_super import LinearRegressionSuper
+from utils.util import r_squared
 
 
 class LinearRegressionSGD(LinearRegressionSuper):
@@ -44,12 +46,12 @@ class LinearRegressionSGD(LinearRegressionSuper):
         else:
             X_cons = np.insert(X, 0, values=1, axis=1)
         
-        coef = np.random.randn(X.shape[1])
+        coef = np.random.randn(X_cons.shape[1])
         epoch = 0
-        mse = np.sum(np.power(X.dot(coef) - y, 2)) / X.shape[1]
+        mse = np.sum(np.power(X_cons.dot(coef) - y, 2)) / X_cons.shape[1]
         while epoch < self._n_epoch:
-            coef_new = coef - (self._alpha * (2 * X.transpose().dot(X.dot(coef) - y))/ X.shape[1])
-            mse_new = np.sum((X.dot(coef_new) - y) ** 2) / X.shape[1]
+            coef_new = coef - (self._alpha * (2 * X_cons.transpose().dot(X_cons.dot(coef) - y))/ X.shape[1])
+            mse_new = np.sum((X_cons.dot(coef_new) - y) ** 2) / X_cons.shape[1]
             # deal with learning rate of too large values
             if (mse_new > mse) & ((mse_new/mse) > 1.05):
                 raise ValueError('The mse is increasing instead. Please check the learning rate.')
@@ -71,7 +73,8 @@ class LinearRegressionSGD(LinearRegressionSuper):
 
         self._coef = coef
         self._mse = mse
-
+        self._residual = mse * X_cons.shape[1]# np.sum((X_cons.dot(self.coef) - y) ** 2)
+        self._r_squared = r_squared(y, self.residual)
     """
     TODO:
     1. Create gradient descent as a function in the utility and update the fit function
