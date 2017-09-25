@@ -21,6 +21,7 @@ a prediction based on the training result"""
             else:
                 X_cons = np.insert(X, 0, values=1, axis=1)
             w_hat = np.linalg.inv(X_cons.transpose().dot(X_cons)).dot(X_cons.transpose().dot(y))
+
             self._mse = np.sum((X_cons.dot(w_hat) - y) ** 2) / len(y)
             self._intercept = w_hat[0]
             self._coef = w_hat
