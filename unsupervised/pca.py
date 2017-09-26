@@ -8,6 +8,7 @@ class PCA(MLClass):
         self._components = None
         self._eigenvals = None
         self._method = method
+        self_explained_variance_ratio = None
 
     @property
     def components(self):
@@ -17,6 +18,10 @@ class PCA(MLClass):
     def eigenvals(self):
         return self._eigenvals
 
+    @property
+    def explained_variance_ratio(self):
+        return self._explained_variance_ratio
+
     def fit(self, X):
         if self._method in ('svd' ,):
             results = self.__pca_svd(X)
@@ -24,6 +29,7 @@ class PCA(MLClass):
             results = self.__pca_cov(X)
         self._components = results[0]
         self._eigenvals = results[1]
+        self._explained_variance_ratio = results[1] / np.sum(results[1])
 
     def __pca_svd(self, X):
         """perform singular value decomposition on the original matrix to get

@@ -2,7 +2,7 @@
 from __future__ import division
 import numpy as np
 from utils.metaclass.linear_regression_super import LinearRegressionSuper
-from utils.util import r_squared
+from utils.utils import r_squared
 
 
 class LinearRegressionSGD(LinearRegressionSuper):
